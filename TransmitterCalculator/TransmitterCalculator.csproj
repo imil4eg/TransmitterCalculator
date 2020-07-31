@@ -62,7 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\IBoardCoordinate.cs" />
+    <Compile Include="Interfaces\IBoardCoordinate.cs" />
     <Compile Include="Controls\RadioTransmitter.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -75,25 +75,26 @@
     <Compile Include="Controls\Transmitter.Designer.cs">
       <DependentUpon>Transmitter.cs</DependentUpon>
     </Compile>
-    <Compile Include="CoordinateCalculator.cs" />
-    <Compile Include="CoordinateSystem.cs" />
-    <Compile Include="CoordinateSystemFactory.cs" />
+    <Compile Include="CoordinateServices\CoordinateCalculator.cs" />
+    <Compile Include="CoordinateServices\CoordinateSystem.cs" />
     <Compile Include="DI\Dependencies.cs" />
     <Compile Include="Drawning\CoordinateSystemDrawer.cs" />
     <Compile Include="Enums\ApplicationItemsCount.cs" />
     <Compile Include="Enums\UnitSize.cs" />
-    <Compile Include="Helpers\Calculator.cs" />
+    <Compile Include="Interfaces\ICoordinateSystemDrawer.cs" />
+    <Compile Include="Interfaces\ICoordinateCalculator.cs" />
+    <Compile Include="Interfaces\ICoordinateSystem.cs" />
+    <Compile Include="Interfaces\ITransmitterService.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\MainWindowModel.cs" />
-    <Compile Include="PointD.cs" />
+    <Compile Include="Structures\PointD.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransmitterService.cs" />
+    <Compile Include="Services\TransmitterService.cs" />
     <EmbeddedResource Include="Controls\RadioTransmitter.resx">
       <DependentUpon>RadioTransmitter.cs</DependentUpon>
     </EmbeddedResource>
