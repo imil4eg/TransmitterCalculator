@@ -7,7 +7,7 @@ namespace TransmitterCalculator
     {
         public static ServiceProvider ResolveDependeciesAndBuild(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<Drawning.ICoordinateSystemDrawer, ICoordinateSystemDrawer>();
+            serviceCollection.AddSingleton<ICoordinateSystemDrawer, CoordinateSystemDrawer>();
             serviceCollection.AddSingleton<ICoordinateSystem, CoordinateSystem>();
             serviceCollection.AddSingleton<ICoordinateCalculator, CoordinateCalculator>();
             serviceCollection.AddSingleton<ITransmitterService, TransmitterService>();

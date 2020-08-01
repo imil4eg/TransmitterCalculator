@@ -5,7 +5,7 @@ namespace TransmitterCalculator.Controls
 {
     public partial class RadioTransmitter : UserControl, IBoardCoordinate
     {
-        public PointF OnBoardLocation { get; set; }
+        public PointD OnBoardLocation { get; set; }
 
         public RadioTransmitter()
         {

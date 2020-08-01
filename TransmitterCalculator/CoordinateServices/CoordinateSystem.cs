@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using TransmitterCalculator.Controls;
 
 namespace TransmitterCalculator
@@ -18,8 +19,6 @@ namespace TransmitterCalculator
         private readonly Queue<IList<float>> _inputTime;
         private readonly Queue<PointD> _radioTransmitterCoordinates;
 
-        private RadioTransmitter _radioTransmitter;
-
         public CoordinateSystem(ITransmitterService transmitterService,
             ICoordinateCalculator coordinateCalculator)
         {
@@ -28,28 +27,6 @@ namespace TransmitterCalculator
 
             _inputTime = new Queue<IList<float>>();
             _radioTransmitterCoordinates = new Queue<PointD>();
-        }
-
-        public void Initialize(IList<Transmitter> transmitters, RadioTransmitter radioTransmitter, int windowWidth, int windowHeight)
-        {
-            if (transmitters == null)
-            {
-                throw new ArgumentNullException(nameof(transmitters));
-            }
-
-            if (radioTransmitter == null)
-            {
-                throw new ArgumentNullException(nameof(radioTransmitter));
-            }
-
-            if (transmitters.Count != ApplicationItemsCount.TRANSMITTERS_COUNT)
-            {
-                throw new ArgumentException("Количество радиоприемников не равно трем.");
-            }
-
-            _transmitterService.SetTransmitters(transmitters);
-            _coordinateCalculator.SetWindowParameters(windowWidth, windowHeight);
-            _radioTransmitter = radioTransmitter;
         }
 
         public void ProcessInputFile(string inputFile)
@@ -77,14 +54,22 @@ namespace TransmitterCalculator
                 return;
             }
 
-            IList<Transmitter> transmitters = _transmitterService.GetTransmitters();
-            IList<float> times = _inputTime.Dequeue();
+            try
+            {
+                IList<Transmitter> transmitters = _transmitterService.GetTransmitters();
+                IList<float> times = _inputTime.Dequeue();
 
-            PointD radioTransmitterOnBoardLocation = _coordinateCalculator.CalculateRadioTransmitterOnBoardCoordinates(times, transmitters);
-            _radioTransmitterCoordinates.Enqueue(radioTransmitterOnBoardLocation);
+                PointD radioTransmitterOnBoardLocation = _coordinateCalculator.CalculateRadioTransmitterOnBoardCoordinates(times, transmitters);
+                _radioTransmitterCoordinates.Enqueue(radioTransmitterOnBoardLocation);
 
-            _radioTransmitter.Location =
-                _coordinateCalculator.CoordinateToFormLocation(radioTransmitterOnBoardLocation.X, radioTransmitterOnBoardLocation.Y, _radioTransmitter);
+                RadioTransmitter radioTransmitter = _transmitterService.GetRadioTransmitter();
+                radioTransmitter.Location =
+                    _coordinateCalculator.CoordinateToFormLocation(radioTransmitterOnBoardLocation.X, radioTransmitterOnBoardLocation.Y, radioTransmitter);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public string GetRadioTransmitterLocationsAsString()

@@ -7,7 +7,6 @@ namespace TransmitterCalculator
 {
     public interface ICoordinateCalculator
     {
-        void SetWindowParameters(int windowWidth, int windowHeight);
         Point CoordinateToFormLocation(string x, string y, Control control);
         Point CoordinateToFormLocation(double x, double y, Control control);
         PointD CalculateRadioTransmitterOnBoardCoordinates(IList<float> time, IList<Transmitter> transmitters);

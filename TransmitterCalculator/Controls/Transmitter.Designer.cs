@@ -37,7 +37,6 @@
             this.BackColor = System.Drawing.SystemColors.Desktop;
             this.Name = "Transmitter";
             this.Size = new System.Drawing.Size(15, 20);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Transmitter_MouseDown_1);
             this.ResumeLayout(false);
 
         }

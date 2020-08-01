@@ -8,5 +8,7 @@ namespace TransmitterCalculator
         IList<Transmitter> GetTransmitters();
         void SetTransmitters(IList<Transmitter> transmitters);
         void SetTransmittersLocations(string coordinatesLine);
+        void SetRadioTransmitter(RadioTransmitter radioTransmitter);
+        RadioTransmitter GetRadioTransmitter();
     }
 }

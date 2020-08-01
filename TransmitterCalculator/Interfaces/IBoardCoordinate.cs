@@ -4,6 +4,6 @@ namespace TransmitterCalculator
 {
     public interface IBoardCoordinate
     {
-        PointF OnBoardLocation { get; set; }
+        PointD OnBoardLocation { get; set; }
     }
 }

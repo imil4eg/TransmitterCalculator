@@ -3,25 +3,32 @@ using System.Linq;
 using TransmitterCalculator.Controls;
 using System;
 using System.IO;
-using TransmitterCalculator.Drawning;
+using TransmitterCalculator.Settings;
 
 namespace TransmitterCalculator
 {
     public partial class MainForm : Form
     {
         private readonly ICoordinateSystem _coordinateSystem;
-        private readonly Drawning.ICoordinateSystemDrawer _coordinateSystemDrawer;
+        private readonly ICoordinateSystemDrawer _coordinateSystemDrawer;
+        private readonly ITransmitterService _transmitterService;
 
-        public MainForm(ICoordinateSystem coordinateSystem, Drawning.ICoordinateSystemDrawer coordinateSystemDrawer)
+        public MainForm(ICoordinateSystem coordinateSystem, 
+            ICoordinateSystemDrawer coordinateSystemDrawer,
+            ITransmitterService transmitterService)
         {
             InitializeComponent();
 
             _coordinateSystemDrawer = coordinateSystemDrawer ?? throw new ArgumentNullException(nameof(coordinateSystemDrawer));
             _coordinateSystem = coordinateSystem ?? throw new ArgumentNullException(nameof(coordinateSystem));
+            _transmitterService = transmitterService ?? throw new ArgumentNullException(nameof(transmitterService));
+
+            CoordinateSystemSettings.Instance.Initialize(this.Width, this.Height);
+
             var transmitters = this.Controls.Cast<Control>().Where(c => c is Transmitter).Select(c => (Transmitter)c).ToArray();
             var radioTransmitter = (RadioTransmitter)this.Controls.Cast<Control>().FirstOrDefault(c => c is RadioTransmitter);
-            _coordinateSystem.Initialize(transmitters, radioTransmitter, this.Width, this.Height);
-            _coordinateSystemDrawer.Initialize(transmitters, radioTransmitter, this.Width, this.Height);
+            _transmitterService.SetTransmitters(transmitters);
+            _transmitterService.SetRadioTransmitter(radioTransmitter);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -58,15 +65,22 @@ namespace TransmitterCalculator
 
         private void UploadInputToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var openFileDialog = new OpenFileDialog())
+            try
             {
-                openFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt";
-                openFileDialog.Title = "Выберите входной файл";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                using (var openFileDialog = new OpenFileDialog())
                 {
-                    _coordinateSystem.ProcessInputFile(openFileDialog.FileName);
+                    openFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt";
+                    openFileDialog.Title = "Выберите входной файл";
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        _coordinateSystem.ProcessInputFile(openFileDialog.FileName);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

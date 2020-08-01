@@ -102,7 +102,6 @@
             this.radioTransmitter1.BackColor = System.Drawing.Color.Lime;
             this.radioTransmitter1.Location = new System.Drawing.Point(587, 406);
             this.radioTransmitter1.Name = "radioTransmitter1";
-            this.radioTransmitter1.OnBoardLocation = ((System.Drawing.PointF)(resources.GetObject("radioTransmitter1.OnBoardLocation")));
             this.radioTransmitter1.Size = new System.Drawing.Size(21, 24);
             this.radioTransmitter1.TabIndex = 3;
             // 
@@ -111,7 +110,6 @@
             this.transmitter3.BackColor = System.Drawing.SystemColors.Desktop;
             this.transmitter3.Location = new System.Drawing.Point(757, 274);
             this.transmitter3.Name = "transmitter3";
-            this.transmitter3.OnBoardLocation = ((System.Drawing.PointF)(resources.GetObject("transmitter3.OnBoardLocation")));
             this.transmitter3.Size = new System.Drawing.Size(15, 20);
             this.transmitter3.TabIndex = 2;
             // 
@@ -120,7 +118,6 @@
             this.transmitter2.BackColor = System.Drawing.SystemColors.Desktop;
             this.transmitter2.Location = new System.Drawing.Point(575, 274);
             this.transmitter2.Name = "transmitter2";
-            this.transmitter2.OnBoardLocation = ((System.Drawing.PointF)(resources.GetObject("transmitter2.OnBoardLocation")));
             this.transmitter2.Size = new System.Drawing.Size(15, 20);
             this.transmitter2.TabIndex = 1;
             // 
@@ -129,7 +126,6 @@
             this.transmitter1.BackColor = System.Drawing.SystemColors.Desktop;
             this.transmitter1.Location = new System.Drawing.Point(448, 275);
             this.transmitter1.Name = "transmitter1";
-            this.transmitter1.OnBoardLocation = ((System.Drawing.PointF)(resources.GetObject("transmitter1.OnBoardLocation")));
             this.transmitter1.Size = new System.Drawing.Size(15, 20);
             this.transmitter1.TabIndex = 0;
             // 

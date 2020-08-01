@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using TransmitterCalculator.Controls;
+using TransmitterCalculator.Settings;
 
 namespace TransmitterCalculator
 {
@@ -12,6 +12,7 @@ namespace TransmitterCalculator
         private readonly ICoordinateCalculator _coordinateCalculator;
 
         private IList<Transmitter> _transmitters;
+        private RadioTransmitter _radioTransmitter;
 
         public TransmitterService(ICoordinateCalculator coordinateCalculator)
         {
@@ -29,12 +30,34 @@ namespace TransmitterCalculator
 
             if (coordinatesLineSplitted.Length != COORDINATES_ON_LINE_COUNT)
             {
-                throw new ArgumentException("Неверное количество координат.");
+                throw new ArgumentException($"Неверное количество координат. Было предоставлено {coordinatesLineSplitted.Length}, а должно быть {COORDINATES_ON_LINE_COUNT}.");
             }
 
             for (int coordinateIndex = 0, transmitterIndex = 0; coordinateIndex < coordinatesLineSplitted.Length; coordinateIndex += 2, transmitterIndex++)
             {
-                _transmitters[transmitterIndex].OnBoardLocation = new PointF(float.Parse(coordinatesLineSplitted[coordinateIndex]), float.Parse(coordinatesLineSplitted[coordinateIndex + 1]));
+                double xD;
+                if (!double.TryParse(coordinatesLineSplitted[coordinateIndex], out xD))
+                {
+                    throw new ArgumentException($"Неверный формат координаты {coordinatesLineSplitted[coordinateIndex]}");
+                }
+                else if (xD > CoordinateSystemSettings.Instance.MaxXCoordinate || xD < CoordinateSystemSettings.Instance.MinXCoordinate)
+                {
+                    throw new ArgumentOutOfRangeException($"{xD} не входит в диапозон допустимых значений для координаты Х." +
+                        $" Значение для X координат должно быть от {CoordinateSystemSettings.Instance.MinXCoordinate} до {CoordinateSystemSettings.Instance.MaxXCoordinate}");
+                }
+
+                double yD;
+                if (!double.TryParse(coordinatesLineSplitted[coordinateIndex + 1], out yD))
+                {
+                    throw new ArgumentException($"Неверный формат координаты {coordinatesLineSplitted[coordinateIndex + 1]}");
+                }
+                else if (yD > CoordinateSystemSettings.Instance.MaxYCoordiante || yD < CoordinateSystemSettings.Instance.MinYCoordinate)
+                {
+                    throw new ArgumentOutOfRangeException($"{yD} не входит в диапозон допустимых значений для координаты Y. " +
+                        $"Значение для Y координат должно быть от {CoordinateSystemSettings.Instance.MinYCoordinate} до {CoordinateSystemSettings.Instance.MaxYCoordiante}");
+                }
+
+                _transmitters[transmitterIndex].OnBoardLocation = new PointD(xD, yD);
                 _transmitters[transmitterIndex].Location =
                     _coordinateCalculator.CoordinateToFormLocation(coordinatesLineSplitted[coordinateIndex], coordinatesLineSplitted[coordinateIndex + 1], _transmitters[transmitterIndex]);
             }
@@ -58,6 +81,21 @@ namespace TransmitterCalculator
         public IList<Transmitter> GetTransmitters()
         {
             return _transmitters;
+        }
+
+        public void SetRadioTransmitter(RadioTransmitter radioTransmitter)
+        {
+            if (radioTransmitter == null)
+            {
+                throw new ArgumentNullException(nameof(radioTransmitter));
+            }
+
+            _radioTransmitter = radioTransmitter;
+        }
+
+        public RadioTransmitter GetRadioTransmitter()
+        {
+            return _radioTransmitter;
         }
     }
 }

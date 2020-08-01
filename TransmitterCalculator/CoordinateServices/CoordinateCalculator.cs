@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using TransmitterCalculator.Controls;
+using TransmitterCalculator.Settings;
 
 namespace TransmitterCalculator
 {
@@ -10,15 +11,6 @@ namespace TransmitterCalculator
     {
         private const int SIGNAL_SPEED = 1000000;
         private const int ARRIVAL_TIME_PER_LINE_IN_INPUT_FILE_COUNT = 3;
-
-        private int _windowWidth;
-        private int _windowHeight;
-
-        public void SetWindowParameters(int windowWidth, int windowHeight)
-        {
-            _windowWidth = windowWidth;
-            _windowHeight = windowHeight;
-        }
 
         public Point CoordinateToFormLocation(string x, string y, Control control)
         {
@@ -29,6 +21,7 @@ namespace TransmitterCalculator
 
             if (string.IsNullOrEmpty(y))
             {
+
                 throw new ArgumentNullException(nameof(y));
             }
 
@@ -54,9 +47,9 @@ namespace TransmitterCalculator
                 throw new ArgumentNullException(nameof(control));
             }
 
-            int xCoordinateZeroPoint = _windowWidth / 2;
-            int yCoordinateZeroPoint = _windowHeight / 2;
-
+            int xCoordinateZeroPoint = CoordinateSystemSettings.Instance.BoardWidth / 2;
+            int yCoordinateZeroPoint = CoordinateSystemSettings.Instance.BoardHeight / 2;
+            
             var location = new Point
             {
                 X = (int)(xCoordinateZeroPoint + (x * UnitSize.UNIT_WIDTH) - (control.Width / 2)),
